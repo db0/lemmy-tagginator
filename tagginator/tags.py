@@ -3,4 +3,6 @@ TAG_REFERENCE = {
     "piracy@lemmy.dbzer0.com": ['Piracy'],
     "stable_diffusion_art@lemmy.dbzer0.com": ['StableDiffusion', 'AIArt'],
     "magnagothica@lemmy.dbzer0.com": ['Magnagothica'],
+    "boston@lemmy.world": ['Boston'],
+    "cordcutters@sh.itjust.works": ['Cordcutters'],
 }
