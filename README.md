@@ -23,4 +23,12 @@ Currently Lemmy does not support tagging posts, and it [doesn't appear this migh
 
 ## Adding your community to the tagginator
 
-If you want your community monitored by this script, please either send a PR for `tags.py`, or contact me at @db0@lemmy.dbzer0.com or @db0@hachyderm.io
+If you want your community monitored by this script, please either send a PR for `tags.py`, or contact me at @db0@lemmy.dbzer0.com or @db0@hachyderm.io. For each community, provide us with the tags that will be always added, and optionally a list of tags that will be used only is the post body contains them.
+
+## Using the tagginator
+
+Simply continue posting in that community as normal
+
+If you want to use an optional tag in your post, simply add it somewhere in the post body, but ensure it exists in the tagginator's `tags.py`
+
+If you want to avoid the tagginator tagging a specific post, then simply add the tag `#SkipTagginator` somewhere in the body.

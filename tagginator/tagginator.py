@@ -38,6 +38,9 @@ class Tagginator:
                     post_name = t['post']['name']
                     post_body = t['post']['body']
                     tags = cdict['tags'].copy()
+                    if f"#SkipTagginator" in post_body:
+                        self.lemmy.post.mark_as_read(post_id, True)
+                        continue
                     logger.info(f"Processing: {post_name} ({post_url})")
                     s = self.mastodon.search(post_url,result_type="statuses")
                     if not len(s['statuses']) > 0:
