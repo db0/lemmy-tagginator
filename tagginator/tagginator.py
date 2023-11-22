@@ -26,7 +26,7 @@ class Tagginator:
             new_threads = self.lemmy.post.list(
                 community_id=cdict["community_id"], sort=SortType.New, limit=1
             )
-            found_post = False
+            found_matching = False
             for t in new_threads:
                 dt = t['post']['published'].split('.')[0]
                 d = datetime.strptime(dt,"%Y-%m-%dT%H:%M:%S")
@@ -45,7 +45,7 @@ class Tagginator:
                         temp_lemmy = Lemmy(cdict["origin_domain"])
                         s = temp_lemmy.resolve_object(post_url)
                         if s is not None:
-                            community_post_url = f"{cdict['origin_domain']}/post/{s['post']['id']}"
+                            community_post_url = f"{cdict['origin_domain']}/post/{s['post']['post']['id']}"
                     logger.debug(community_post_url)
                     self.mastodon.status_reply(
                         to_status=mastodon_status,
@@ -53,5 +53,5 @@ class Tagginator:
                                 "\n\n(Replying in this thread will appear as a comment in the lemmy discussion.)",
                     )
                     self.lemmy.post.mark_as_read(post_id, True)
-            if not found_post:
+            if not found_matching:
                 logger.debug(f"No new posts in community ID {cdict['community']}")

@@ -160,4 +160,4 @@ cython_debug/
 #.idea/
 
 pytooter*
-test.py
+test*.py
