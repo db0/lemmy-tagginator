@@ -8,7 +8,7 @@ Any time a new post from one of the monitored communities appears on lemmy (see 
 
 ## Why is this necessary?
 
-Even though Lemmy posts federate ([badly](https://github.com/LemmyNet/lemmy/issues/317)) to microblogging service like mastodon, they do cannot be tagged. Even if you manually add tags, they are ignored. 
+Even though Lemmy posts federate ([badly](https://github.com/LemmyNet/lemmy/issues/2972)) to microblogging service like mastodon, they do cannot be tagged. Even if you manually add tags, they are ignored. 
 
 Lemmy is also suffering from a discoverability and engagement issue on niche communities, which creates a vicious cycle where a niche community doesn't get enough engagement so it doesn't attract new users, so it doesn't get enough engagement etc. 
 
