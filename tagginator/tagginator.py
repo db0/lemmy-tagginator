@@ -49,7 +49,8 @@ class Tagginator:
                     logger.debug(community_post_url)
                     self.mastodon.status_reply(
                         to_status=mastodon_status,
-                        status=f"Tagging Lemmy Post '{post_name}' ({community_post_url}): #{' #'.join(cdict['tags'])}",
+                        status=f"Tagging Lemmy Post '{post_name}' ({community_post_url}): #{' #'.join(cdict['tags'])}"
+                                "\n\n(Replying in this thread will appear as a comment in the lemmy discussion.)",
                     )
                     self.lemmy.post.mark_as_read(post_id, True)
             if not found_post:
