@@ -10,12 +10,13 @@ class Tagginator:
         self.lemmy = _base_lemmy.lemmy
         self.mastodon = base_mastodon.mastodon
         self.parsed_communities = []
-        for community,tags in TAG_REFERENCE.items():
+        for entry in TAG_REFERENCE:
             cdict = {
-                "community": community,
-                "origin_domain": f"https://{community.split('@')[1]}",
-                "community_id": self.lemmy.discover_community(community),
-                "tags": tags,
+                "community": entry["community"],
+                "origin_domain": f"https://{entry['community'].split('@')[1]}",
+                "community_id": self.lemmy.discover_community(entry['community']),
+                "tags": entry['tags'],
+                "optional_tags": entry['optional_tags'],
             }
             self.parsed_communities.append(cdict)
 
@@ -35,6 +36,8 @@ class Tagginator:
                     post_url = t['post']['ap_id']
                     post_id = t['post']['id']
                     post_name = t['post']['name']
+                    post_body = t['post']['body']
+                    tags = cdict['tags'].copy()
                     logger.info(f"Processing: {post_name} ({post_url})")
                     s = self.mastodon.search(post_url,result_type="statuses")
                     if not len(s['statuses']) > 0:
@@ -46,9 +49,12 @@ class Tagginator:
                         s = temp_lemmy.resolve_object(post_url)
                         if s is not None:
                             community_post_url = f"{cdict['origin_domain']}/post/{s['post']['post']['id']}"
+                    for t in cdict['optional_tags']:
+                        if f"#{t}" in post_body:
+                            tags.append(t)
                     self.mastodon.status_reply(
                         to_status=mastodon_status,
-                        status=f"Tagging Lemmy Post '{post_name}' ({community_post_url}): #{' #'.join(cdict['tags'])}"
+                        status=f"Tagging Lemmy Post '{post_name}' ({community_post_url}): #{' #'.join(tags)}"
                                 "\n\n(Replying in this thread will appear as a comment in the lemmy discussion.)"
                                 '\n\nI am FOSS bot. [What\'s all this then](https://github.com/db0/lemmy-tagginator/blob/main/README.md)?',
                     )
