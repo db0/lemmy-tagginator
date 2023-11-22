@@ -55,11 +55,12 @@ class Tagginator:
                     for t in cdict['optional_tags']:
                         if f"#{t}" in post_body:
                             tags.append(t)
-                    self.mastodon.status_reply(
-                        to_status=mastodon_status,
-                        status=f"Tagging Lemmy Post '{post_name}' ({community_post_url}): #{' #'.join(tags)}"
+                    self.mastodon.status_post(
+                        in_reply_to_id=mastodon_status['id'],
+                        status=f"New Lemmy Post: {post_name} ({community_post_url})"
+                                f"\nTagging: #{' #'.join(tags)}"
                                 "\n\n(Replying in this thread will appear as a comment in the lemmy discussion.)"
-                                '\n\nI am FOSS bot. Check my README: https://github.com/db0/lemmy-tagginator/blob/main/README.md',
+                                '\n\nI am a FOSS bot. Check my README: https://github.com/db0/lemmy-tagginator/blob/main/README.md',
                     )
                     self.lemmy.post.mark_as_read(post_id, True)
             if not found_matching:

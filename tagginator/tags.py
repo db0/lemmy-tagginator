@@ -37,7 +37,7 @@ TAG_REFERENCE = [
     {
         "community": "opensource@lemmy.world",
         "tags": ['OpenSource'],
-        "optional_tags": [],
+        "optional_tags": ['FOSS'],
     },
     {
         "community": "selfhosted@lemmy.world",
@@ -57,4 +57,10 @@ TAG_REFERENCE = [
     ### Rejected
     # Rejecting cordcutters it seems to be filled up with botted posts and I'm looking to boost organic communities.
     # "cordcutters@sh.itjust.works"
+    ## Testing
+    # {
+    #     "community": "playground@lemmy.dbzer0.com",
+    #     "tags": ['Test'],
+    #     "optional_tags": ['OptionalTest'],
+    # },
 ]
