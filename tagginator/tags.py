@@ -5,4 +5,8 @@ TAG_REFERENCE = {
     "magnagothica@lemmy.dbzer0.com": ['Magnagothica'],
     "boston@lemmy.world": ['Boston'],
     "cordcutters@sh.itjust.works": ['Cordcutters'],
+    "nyc@lemmy.world": ['NYC'],
+    "opensource@lemmy.ml": ['Opensource'],
+    "selfhosted@lemmy.world": ['Selfhosted'],
+    "soccer@lemmy.world": ['Soccer'],
 }
