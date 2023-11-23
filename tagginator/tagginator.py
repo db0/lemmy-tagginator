@@ -25,7 +25,7 @@ class Tagginator:
             # We only search for 1 new posts per community, to avoid looking like a spam account
             # This will allow us to spread our tagging to 1 per minute per community
             new_threads = self.lemmy.post.list(
-                community_id=cdict["community_id"], sort=SortType.New, limit=1
+                community_id=cdict["community_id"], sort=SortType.New, limit=5
             )
             found_matching = False
             for t in new_threads:
@@ -36,7 +36,7 @@ class Tagginator:
                     post_url = t['post']['ap_id']
                     post_id = t['post']['id']
                     post_name = t['post']['name']
-                    post_body = t['post']['body']
+                    post_body = t['post'].get('body','')
                     tags = cdict['tags'].copy()
                     if f"#SkipTagginator" in post_body:
                         self.lemmy.post.mark_as_read(post_id, True)
@@ -63,5 +63,7 @@ class Tagginator:
                                 '\n\nI am a FOSS bot. Check my README: https://github.com/db0/lemmy-tagginator/blob/main/README.md',
                     )
                     self.lemmy.post.mark_as_read(post_id, True)
+                    # We break out of the loop so that we only consider the first unread post
+                    break
             if not found_matching:
                 logger.debug(f"No new posts in community ID {cdict['community']}")
