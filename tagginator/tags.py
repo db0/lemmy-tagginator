@@ -8,7 +8,7 @@ TAG_REFERENCE = [
     {
         "community": "piracy@lemmy.dbzer0.com",
         "tags": ['Piracy'],
-        "optional_tags": ['Torrents', 'Arrs'],
+        "optional_tags": ['Torrents', 'Arrs', 'Usenet'],
         "auto_tagginate": True,
     },
     {

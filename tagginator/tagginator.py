@@ -39,10 +39,12 @@ class Tagginator:
                     post_name = t['post']['name']
                     post_body = t['post'].get('body','')
                     tags = cdict['tags'].copy()
-                    if "#SkipTagginator" not in post_body:
+                    if "#SkipTagginator".lower() in post_body.lower():
+                        logger.debug("Skipping Post for having #SkipTagginator")
                         self.lemmy.post.mark_as_read(post_id, True)
                         continue
-                    if not cdict["auto_tagginate"] and not "#UseTagginator" in post_body:
+                    if not cdict["auto_tagginate"] and not "#UseTagginator".lower() in post_body.lower():
+                        logger.debug("Avoiding Post for not having #UseTagginator")
                         self.lemmy.post.mark_as_read(post_id, True)
                         continue
                     logger.info(f"Processing: {post_name} ({post_url})")
@@ -57,7 +59,7 @@ class Tagginator:
                         if s is not None:
                             community_post_url = f"{cdict['origin_domain']}/post/{s['post']['post']['id']}"
                     for t in cdict['optional_tags']:
-                        if f"#{t}" in post_body:
+                        if f"#{t}".lower() in post_body.lower():
                             tags.append(t)
                     self.mastodon.status_post(
                         in_reply_to_id=mastodon_status['id'],
