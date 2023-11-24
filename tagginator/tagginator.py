@@ -17,6 +17,7 @@ class Tagginator:
                 "community_id": self.lemmy.discover_community(entry['community']),
                 "tags": entry['tags'],
                 "optional_tags": entry['optional_tags'],
+                "auto_tagginate": entry["auto_tagginate"],
             }
             self.parsed_communities.append(cdict)
 
@@ -38,7 +39,10 @@ class Tagginator:
                     post_name = t['post']['name']
                     post_body = t['post'].get('body','')
                     tags = cdict['tags'].copy()
-                    if f"#SkipTagginator" in post_body:
+                    if "#SkipTagginator" not in post_body:
+                        self.lemmy.post.mark_as_read(post_id, True)
+                        continue
+                    if not cdict["auto_tagginate"] and not "#UseTagginator" in post_body:
                         self.lemmy.post.mark_as_read(post_id, True)
                         continue
                     logger.info(f"Processing: {post_name} ({post_url})")
