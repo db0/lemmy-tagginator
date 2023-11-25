@@ -24,6 +24,12 @@ TAG_REFERENCE = [
         "auto_tagginate": True,
     },
     {
+        "community": "stable_diffusion@lemmy.dbzer0.com",
+        "tags": ['StableDiffusion'],
+        "optional_tags": ['Memes', 'News', 'StabilityAI'],
+        "auto_tagginate": True,
+    },
+    {
         "community": "magnagothica@lemmy.dbzer0.com",
         "tags": ['Magnagothica'],
         "optional_tags": [],

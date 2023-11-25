@@ -32,3 +32,12 @@ Simply continue posting in that community as normal
 If you want to use an optional tag in your post, simply add it somewhere in the post body, but ensure it exists in the tagginator's `tags.py`
 
 If you want to avoid the tagginator tagging a specific post, then simply add the tag `#SkipTagginator` somewhere in the body.
+
+## Running your own
+
+To run this bot you need
+
+* One lemmy bot account in your instance which we'll use to retrieve new posts and respond to reports against the bot
+* One mastodon bot account which will tag the posts.
+
+Put the details of both those accounts in `.env`. A sample `.env ` file has been put .env_template

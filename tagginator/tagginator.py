@@ -1,3 +1,4 @@
+import os
 from typing import Any
 from tagginator.tags import TAG_REFERENCE
 from pythorhead.types import SortType
@@ -10,6 +11,8 @@ class Tagginator:
         self.lemmy = _base_lemmy.lemmy
         self.mastodon = base_mastodon.mastodon
         self.parsed_communities = []
+        tagginator_user = self.lemmy.user.get(username=f"tagginator@{os.environ['MASTODON_INSTANCE']}")
+        self.tagginator_lemmy_id = tagginator_user["person_view"]["person"]['id']        
         for entry in TAG_REFERENCE:
             cdict = {
                 "community": entry["community"],
@@ -40,14 +43,14 @@ class Tagginator:
                     post_body = t['post'].get('body','')
                     tags = cdict['tags'].copy()
                     if "#SkipTagginator".lower() in post_body.lower():
-                        logger.debug("Skipping Post for having #SkipTagginator")
+                        logger.debug("Skipping '{post_name}' for having #SkipTagginator")
                         self.lemmy.post.mark_as_read(post_id, True)
                         continue
                     if not cdict["auto_tagginate"] and not "#UseTagginator".lower() in post_body.lower():
-                        logger.debug("Avoiding Post for not having #UseTagginator")
+                        logger.debug("Avoiding '{post_name}' for not having #UseTagginator")
                         self.lemmy.post.mark_as_read(post_id, True)
                         continue
-                    logger.info(f"Processing: {post_name} ({post_url})")
+                    logger.info(f"Processing: {post_name} ({post_url}) in {cdict['community']}")
                     s = self.mastodon.search(post_url,result_type="statuses")
                     if not len(s['statuses']) > 0:
                         continue
@@ -65,11 +68,34 @@ class Tagginator:
                         in_reply_to_id=mastodon_status['id'],
                         status=f"New Lemmy Post: {post_name} ({community_post_url})"
                                 f"\nTagging: #{' #'.join(tags)}"
-                                "\n\n(Replying in this thread will appear as a comment in the lemmy discussion.)"
+                                "\n\n(Replying in the OP of this thread (NOT THIS BOT!) will appear as a comment in the lemmy discussion.)"
                                 '\n\nI am a FOSS bot. Check my README: https://github.com/db0/lemmy-tagginator/blob/main/README.md',
                     )
                     self.lemmy.post.mark_as_read(post_id, True)
                     # We break out of the loop so that we only consider the first unread post
                     break
             if not found_matching:
-                logger.debug(f"No new posts in community ID {cdict['community']}")
+                pass
+                # logger.debug(f"No new posts in community ID {cdict['community']}")
+
+    def resolve_reports(self):
+        rl = self.lemmy.comment.report_list(
+            unresolved_only=True,
+            limit=10
+        )
+        for report in rl:
+            if report["comment"]["creator_id"] == self.tagginator_lemmy_id:
+                reporter = self.lemmy.user.get(person_id=report["comment_report"]["creator_id"])
+                lemmy_tagginator_text = "Lemmy Tagginator"
+                try:
+                    reporter_instance_url_base = reporter["person_view"]["person"]["actor_id"].split('/u/')
+                    reporter_instance = reporter_instance_url_base[0].split('//')[1]
+                    lemmy_tagginator_text = f"[Lemmy Tagginator]({reporter_instance_url_base[0]}/u/tagginator@utter.online)"
+                except Exception as err:
+                    logger.warning(f"Error trying to link tagginator: {err}")
+                self.lemmy.private_message.create(
+                    recipient_id=reporter["person_view"]["person"]["id"],
+                    content=f"Please do not report the {lemmy_tagginator_text}. Simply block it and you won't ever see it again.\n\nThis is an automated response to your report from the lemmy.dbzer0.com admin team."
+                )
+                self.lemmy.comment.resolve_report(report["comment_report"]["id"])
+                logger.info(f"Resolved Tagginator report from @{reporter['person_view']['person']['name']}@{reporter_instance}")        
