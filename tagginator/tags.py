@@ -80,4 +80,10 @@ TAG_REFERENCE = [
     #     "tags": ['Test'],
     #     "optional_tags": ['OptionalTest'],
     # },
+    {
+        "community": "3dprinting@lemmy.world",
+        "tags": ['3dprinting'],
+        "optional_tags": ['3dprint'],
+        "auto_tagginate": True,
+    },
 ]
