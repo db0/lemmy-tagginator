@@ -86,4 +86,16 @@ TAG_REFERENCE = [
         "optional_tags": ['3dprint'],
         "auto_tagginate": True,
     },
+    {
+        "community": "knitting@lemmy.world",
+        "tags": ['Knitting'],
+        "optional_tags": ['SockKnitting', 'Yarn'],
+        "auto_tagginate": True,
+    },
+    {
+        "community": "gamedev@lemmy.blahaj.zone",
+        "tags": ['GameDev'],
+        "optional_tags": ["GodotEngine", "Unity", "UnrealEngine", "Devlog"],
+        "auto_tagginate": True,
+    },
 ]
