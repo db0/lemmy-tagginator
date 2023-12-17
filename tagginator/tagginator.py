@@ -34,6 +34,8 @@ class Tagginator:
             found_matching = False
             for t in new_threads:
                 dt = t['post']['published'].split('.')[0]
+                if dt.endswith('Z'):
+                    dt = dt[:-1]
                 d = datetime.strptime(dt,"%Y-%m-%dT%H:%M:%S")
                 if d > datetime.utcnow() - timedelta(hours=6) and not t['read']:
                     found_matching = True
