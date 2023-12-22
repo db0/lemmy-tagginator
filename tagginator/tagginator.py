@@ -66,6 +66,7 @@ class Tagginator:
                     for t in cdict['optional_tags']:
                         if f"#{t}".lower() in post_body.lower():
                             tags.append(t)
+                    self.lemmy.post.mark_as_read(post_id, True)
                     self.mastodon.status_post(
                         in_reply_to_id=mastodon_status['id'],
                         status=f"New Lemmy Post: {post_name} ({community_post_url})"
@@ -73,7 +74,6 @@ class Tagginator:
                                 "\n\n(Replying in the OP of this thread (NOT THIS BOT!) will appear as a comment in the lemmy discussion.)"
                                 '\n\nI am a FOSS bot. Check my README: https://github.com/db0/lemmy-tagginator/blob/main/README.md',
                     )
-                    self.lemmy.post.mark_as_read(post_id, True)
                     # We break out of the loop so that we only consider the first unread post
                     break
             if not found_matching:
