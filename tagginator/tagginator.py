@@ -38,12 +38,15 @@ class Tagginator:
                     dt = dt[:-1]
                 d = datetime.strptime(dt,"%Y-%m-%dT%H:%M:%S")
                 if d > datetime.utcnow() - timedelta(hours=6) and not t['read']:
+                    # First thing we need to do is mark as read
+                    # In case this fails for any reason, it won't cause the bot to keep reposting
                     found_matching = True
                     post_url = t['post']['ap_id']
                     post_id = t['post']['id']
                     post_name = t['post']['name']
                     post_body = t['post'].get('body','')
                     tags = cdict['tags'].copy()
+                    self.lemmy.post.mark_as_read(post_id, True)
                     if "#SkipTagginator".lower() in post_body.lower():
                         logger.debug("Skipping '{post_name}' for having #SkipTagginator")
                         self.lemmy.post.mark_as_read(post_id, True)
@@ -66,7 +69,6 @@ class Tagginator:
                     for t in cdict['optional_tags']:
                         if f"#{t}".lower() in post_body.lower():
                             tags.append(t)
-                    self.lemmy.post.mark_as_read(post_id, True)
                     self.mastodon.status_post(
                         in_reply_to_id=mastodon_status['id'],
                         status=f"New Lemmy Post: {post_name} ({community_post_url})"

@@ -6,5 +6,5 @@ class BaseLemmy:
         lemmy_domain = os.environ['LEMMY_DOMAIN']
         lemmy_username = os.environ['LEMMY_USERNAME']
         lemmy_password = os.environ['LEMMY_PASSWORD']
-        self.lemmy = Lemmy(f"https://{lemmy_domain}")
+        self.lemmy = Lemmy(f"https://{lemmy_domain}", raise_exceptions=True)
         self.lemmy.log_in(lemmy_username, lemmy_password)
