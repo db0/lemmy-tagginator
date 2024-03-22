@@ -98,4 +98,10 @@ TAG_REFERENCE = [
         "optional_tags": ["GodotEngine", "Unity", "UnrealEngine", "Devlog"],
         "auto_tagginate": True,
     },
+    {
+        "community": "fediblock@lemmy.dbzer0.com",
+        "tags": ['FediBlock'],
+        "optional_tags": [],
+        "auto_tagginate": True,
+    },
 ]
