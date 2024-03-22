@@ -46,7 +46,6 @@ class Tagginator:
                     post_name = t['post']['name']
                     post_body = t['post'].get('body','')
                     tags = cdict['tags'].copy()
-                    self.lemmy.post.mark_as_read(post_id, True)
                     if "#SkipTagginator".lower() in post_body.lower():
                         logger.debug("Skipping '{post_name}' for having #SkipTagginator")
                         self.lemmy.post.mark_as_read(post_id, True)
@@ -66,12 +65,18 @@ class Tagginator:
                         s = temp_lemmy.resolve_object(post_url)
                         if s is not None:
                             community_post_url = f"{cdict['origin_domain']}/post/{s['post']['post']['id']}"
+                    lemmyverse_link = f"https://lemmyverse.link/{community_post_url.replace('https://', '')}"
                     for t in cdict['optional_tags']:
                         if f"#{t}".lower() in post_body.lower():
                             tags.append(t)
+                    read = None
+                    read = self.lemmy.post.mark_as_read(post_id, True)
+                    if read is None:
+                        logger.warning("Failed to mark post as read. Aborting without tagging!")
+                        return
                     self.mastodon.status_post(
                         in_reply_to_id=mastodon_status['id'],
-                        status=f"New Lemmy Post: {post_name} ({community_post_url})"
+                        status=f"New Lemmy Post: {post_name} ({lemmyverse_link})"
                                 f"\nTagging: #{' #'.join(tags)}"
                                 "\n\n(Replying in the OP of this thread (NOT THIS BOT!) will appear as a comment in the lemmy discussion.)"
                                 '\n\nI am a FOSS bot. Check my README: https://github.com/db0/lemmy-tagginator/blob/main/README.md',
