@@ -104,4 +104,10 @@ TAG_REFERENCE = [
         "optional_tags": [],
         "auto_tagginate": True,
     },
+    {
+        "community": "digital_circus@lemmy.zip",
+        "tags": ['TheAmazingDigitalCircus', 'TADC'],
+        "optional_tags": [],
+        "auto_tagginate": True,
+    },
 ]
